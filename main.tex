@@ -1,0 +1,642 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% AMS uses the snapshot package to track which versions of other 
+%     packages are being loaded to ensure consistent compiles. 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{snapshot}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% We expect most will use sections and subsections (and 
+%     possibly subsubsections). For those that do all numbering will
+%     be of the form section.subsection.counter use the equation
+%     as the counter and resetting it with each subsection. If so,
+%     please leave the lines below as is.
+%
+% To support any authors who wish to divide their notes only into  
+%     sections, or who prefer to use only unnumbered subsections via
+%     \subsection*, the following lines offer the option to do all 
+%     numbering in the form section.counter (again using the 
+%     equation counter) resetting with each section. 
+%     option which avoids having a subsection number of 0 everywhere
+%     please comment out the line \subsectionsfalse below and then
+%     comment out the line \subsectionstrue.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\ifsubsections
+% Uncomment this line and comment out the line below it if you use 
+%     numbered subsections in your notes. 
+%\subsectionstrue 
+% Uncomment this line and comment out the line above if you do not use 
+%     numbered subsections in your notes. 
+%\subsectionsfalse
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Load PCMI lecture notes class file. 
+%     Please do not insert options to the class file to maintain
+%     consistency between the files of all authors.
+%
+% The class file requires (and automatically loads) the following 
+%     packages:
+%         float (provides support for better positioning of floats)
+%         setspace (provides support for adjustment of leading [spacing] of text)
+%         titlesec (provides support for sectioning commands and appearnace of toc)
+%     No need to load these packages if you wish to use them.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{pcmi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Load packages to set up the fonts and provide support for color and     % graphics files.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fonts:  
+%      Palladino as the text family, a smaller Bera for sans
+%      Euler for math characters and Incolsolata for tt
+%      Incolsolata for for a fixed width "typewriter" font
+%      Bera if a sans serif family is required
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[sc]{mathpazo}          % Palatino with smallcaps as text font
+\usepackage{eulervm}               % Euler math
+\usepackage[scaled=0.86]{berasans} % Bera for san serif family
+\usepackage[scaled=1]{inconsolata} % Inconsolata for fixed width
+\usepackage[T1]{fontenc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% We use only those microtype features supported by both pdftex and dvips
+%     (cf. Table 1 on p.7 of the microtype documentation). 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[%
+	protrusion=true,
+	expansion=false,
+	auto=false
+	]{microtype}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Support for color and inclusion of graphics through xcolor and graphicx
+%
+%     Please place any included graphics in a directory named "figures" 
+%     in the same directory as your LaTeX source file. You can then include 
+%     the file "circle.eps" from this folder by issuing the command
+%
+%         \includegraphics[]{circle.eps}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{{./figures/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Define colors for internal and external links for use by authors
+%     if in draft mode (\drafttrue) and as black for final printing
+%     (draftfalse).
+%
+% Authors please imitate this model. If you want to use any colored text
+%     give your color a name and then use the ifdraft switch to set this
+%     name to your color for \drafttrue and also to black for \draftfalse.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifdraft
+	\definecolor{linkred}{rgb}{0.7,0.2,0.2}
+	\definecolor{linkblue}{rgb}{0,0.2,0.6}
+\else
+	\definecolor{linkred}{rgb}{0.0,0.0,0.0}
+	\definecolor{linkblue}{rgb}{0,0.0,0.0}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Authors: please load ALL packages you use that are not in the lists 
+%      above or below (where we have packages that need to be loaded 
+%      "late") at this point.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Authors: load additional packages here
+
+%\usepackage{pstricks,pst-plot,pst-node}
+
+\usepackage{quiver}
+\usepackage{amssymb,amsfonts,amsthm}
+%\usepackage{amsmath}
+\usepackage[makeroom]{cancel}
+\usepackage{mathtools}
+%\usepackage{yfonts}
+%\usepackage{mathrsfs,pifont}
+\usepackage{mathrsfs}
+\usepackage{pifont}% AO: removed mathrsfs as the script it uses clashes with the Euler math used here and replaced it with eucal
+\usepackage{eucal}
+\usepackage{slashed,mathabx} 
+\usepackage[bbgreekl]{mathbbol}
+\usepackage{enumitem}
+
+\usepackage[all]{xy}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Load hyperref and amsrefs packages: these MUST be the last packages 
+%     loaded or problems are very likely to result so please keep
+%     them in this position.
+%
+% Please do not alter any of the options given here to maintain
+%     consistency between authors and with the AMS production
+%     requirements. 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\PassOptionsToPackage{hyphens}{url} 
+\usepackage[
+    setpagesize=false,
+    pagebackref,
+	pdfpagelabels=false,
+    pdfstartview={FitH 1000},
+    bookmarksnumbered=false,
+    linktoc=all,
+    colorlinks=true,
+    anchorcolor=black,
+    menucolor=black,
+    runcolor=black,
+    filecolor=black,
+    linkcolor=linkblue,%IM black if not in draft mode
+	citecolor=linkblue,%IM black if not in draft mode
+	urlcolor=linkred,%IM black if not in draft mode
+]{hyperref}%IM
+\usepackage[backrefs,msc-links,nobysame]{amsrefs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Adjust aspects of formatting of references by amsrefs to match our style
+%         
+%     In particular this provides two macros for use in the eprints
+%         field of a bib entry
+%
+%     For pointers to arXiv preprints, simply use the arXiv citation key
+%         which is the numerical filename of the article abstract (found
+%         at the end of the URL for the abstract). Thus to reference
+%         http://arxiv.org/abs/1503.05174 simply insert \bibarxiv{1503.05174}.
+%         in the eprint field which would thus read
+%             \eprint={\bibarxiv{1503.05174}},
+%
+%     For pointers to preprints at other URLs, give the the full URL.
+%         as an argument to the macro \biburl. Thus to point to
+%             http://www.ugr.es/~jperez/papers/finite-top-sept29.pdf
+%         insert \biburl{http://www.ugr.es/~jperez/papers/finite-top-sept29.pdf}
+%         in the eprint field which would thus read
+%             \eprint={\biburl{http://www.ugr.es/~jperez/papers/finite-top-sept29.pdf}.},
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\customizeamsrefs 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Please load NO packages after  this point. Problems with hyperref or 
+%         amsrefs are likely to result if you do. 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \newtheorems and other numbered elements
+%
+%     Use the area below to define your own \newtheorems using your preferred 
+%         aliases.
+%
+%     To ensure that your environments share the PCMI standard system for autonumbering:
+%         Use only the standard \theoremstyles plain, definition and remark and 
+%             avoid altering the formatting of these styles to ensure uniformity.
+%   
+%         Please tie all your \newtheorems to the equation counter by inserting 
+%             "[equation]" between the alias and the printed name of the 
+%             environement as in the examples below.
+%
+%         Please do NOT change the formatting of the equation counter. 
+%
+%     In order for floats such as Tables and Figures to number and 
+%         reference correctly, please make sure that your \label
+%         command is placed with AFTER or INSIDE the float caption.
+%
+%     This ensures that the label uses the counter value
+%          at the time the float is placed on a page which may be 
+%          different from the counter's value when the float was read 
+%          becuase the float has been moved forward or back.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Authors: define your theoremlike environments here
+
+\theoremstyle{plain}
+\newtheorem{Proposition}[equation]{Proposition}
+\newtheorem{Lemma}[equation]{Lemma}
+\newtheorem{Corollary}[equation]{Corollary}
+\newtheorem{Theorem}[equation]{Theorem}
+
+
+
+\theoremstyle{definition}
+\newtheorem{Definition}[equation]{Definition}
+\newtheorem{Exercise}[equation]{Exercise}
+\newtheorem{Example}[equation]{Example}
+\newtheorem{Remark}[equation]{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Macros
+%     At this point, place the roster of 'personal' macros you use 
+%         in writing up your lectures and other LaTeX files.
+%
+%     The two macros below are provided as examples. In this file
+%         the macro \replace indicates a field (like a name or 
+%         address) in which you need to replace a placeholder value  
+%         provided here with the corresponding value for you or your lectures.
+%
+%     You can verify that you have made all the intended replacements
+%         by simply deleting this macro and checking that no errors result. 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Authors: insert your personal TeX macros here
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{macros}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Start of document body
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Filling in title page, running head and author fields.
+%
+% Each point in this template at which you will need to fill in your own
+%     information is indicated by a dummy \replace macro (shown above). 
+%     Replace this macro and its argument by your corresponding information.
+%
+%     For example, Gauss would replace  
+%         \author{\replace{Ian Morrison}}
+%     by 
+%         \author{Carl Friedrich Gauß}
+%
+%     Note that you may add a short title for running heads, if needed as an optional
+%         argument as in the example below
+%         \title[Guide for PCMI Authors]{Guide for Lecturers in the Park City Mathematics Institute}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[Cluster Algebras]{Cluster Algebras} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    
+%    Author information--add further authors as needed
+%    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author{Alan Yan}
+\date{} 
+\address{}
+\email{}
+%\address{
+%\newline Department of Mathematics,
+%Harvard University,
+%Cambridge, MA 02138 
+%}
+%\email{	alanyan@math.harvard.edu}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Classification and abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\keywords{}
+\begin{abstract}
+    Cluster algebras
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    
+%    Make the title page
+%    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    
+%    The remainder of this document is for your article
+%    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Authors: insert the body here
+
+
+\section{Aims \& Scope} 
+
+These are my personal notes on cluster algebras. We mainly follow the book by Sergey Fomin, Lauren Williams, and Andrei Zelevinsky. 
+
+\section{Quivers}
+
+\begin{Definition}
+    A \textbf{quiver} is a directed graph. An \textbf{ice quiver} is a quiver with a partition of the vertices into \textbf{frozen} vertices and \textbf{mutable} vertices satisfying the following conditions:
+    \begin{enumerate}
+        \item There are no edges between frozen vertices. 
+        \item There are no loops or oriented $2$-cycles. 
+    \end{enumerate}
+\end{Definition}
+
+\begin{Definition}[Matrix Mutation]
+    Let $Q$ be an ice quiver. Let $k \in v(Q)$ be a mutable vertex of $Q$. Then we can construct the mutation of $Q$ at $k$, denoted $\mu_k(Q)$, via the following modifications in order:
+    \begin{enumerate}
+        \item For every pair of edges $i \mapsto k \mapsto j$, we add an edge $i \mapsto j$. 
+        \item Reverse every edge incident to $k$. 
+        \item Remove all oriented $2$ cycles until there are none. 
+    \end{enumerate}
+\end{Definition}
+
+The next proposition describes some properties of quiver mutation. They are special cases of Proposition~\ref{prop: Properties of Matrix Mutation} which are properties of the more general matrix mutation. 
+
+\begin{Proposition}
+    \phantom{h}
+    \begin{enumerate}
+        \item Mutation is involutive: $\mu_k (\mu_k(Q)) = Q$. 
+        \item Mutation commutes with simultaneous reversal of all arrows. 
+        \item Let $k$ and $l$ be two mutable vertices which have no arrows between them. Then $\mu_k(\mu_l(Q)) = \mu_l(\mu_k(Q))$. 
+    \end{enumerate}
+\end{Proposition}
+
+\section{Matrix Mutation}
+
+\begin{Definition}
+    An $n \times n$ matrix $B = (b_{ij})$ with integer entries is called \textbf{skew-symmetrizable} if $d_i b_{ij} = -d_j b_{ji}$ for some positive integers $d_1, \ldots, d_n$. An \textbf{extended skew-symmetrizable matrix} is a $m \times n$ integer matrix with $m \leq n$ such that the top $n \times n$ matrix is skew-symmetrizable. 
+\end{Definition}
+
+\begin{Definition}
+    Let $B = (b_{ij})$ be an extended skew-symmetrizable $m \times n$ matrix. For $k \in [n]$, the \textbf{matrix mutation} in direction $k$ transforms $B$ into $B' = (b_{ij}')$ whose entries are given by 
+    \begin{equation}
+        b_{ij}' = 
+        \begin{cases}
+             -b_{ij} & \text{ if } i = k \text{ or } j = k, \\
+            b_{ij} + b_{ik} b_{kj} & \text{ if } b_{ik} > 0 \text{ and } b_{kj} > 0, \\
+            b_{ij} - b_{ik} b_{kj} & \text{ if } b_{ik} < 0 \text{ and } b_{kj} < 0, \\
+             b_{ij} & \text{ otherwise}. 
+        \end{cases}
+    \end{equation}
+\end{Definition}
+
+\begin{Proposition}\label{prop: Properties of Matrix Mutation}
+    \phantom{h}
+    \begin{enumerate}[label = (\alph*)]
+        \item the mutated matrix $\mu_k(B)$ is extended skew-symmetrizable with the same choice of $d_1, \ldots, d_n$. 
+        \item $\mu_k(\mu_k(B)) = B$. 
+        \item $\mu_k(-B) = -\mu_k(B)$.
+        \item $\mu(B^T) = (\mu_k(B))^T$
+        \item if $b_{ij} = b_{ji} = 0$, then $\mu_i(\mu_j(B)) = \mu_j (\mu_i(B))$. 
+    \end{enumerate}
+\end{Proposition}
+
+\begin{proof}
+    Let $B' = (b_{ij}')$ be the mutated matrix. If $i = k$ or $j = k$, we have $b_{ij}' = -b_{ij}$ and $b_{ji}' = -b_{ji}$. From this, we deduce the equality
+    \[
+        d_i b_{ij}' = -d_i b_{ij} = d_j b_{ji} = - d_j b_{ji}'. 
+    \]
+    If $i, j \neq k$ and $b_{ik}, b_{kj} > 0$, then we have $b_{ij}' = b_{ij} + b_{ik}b_{kj}$ and $b_{ji}' = b_{ji} - b_{jk} b_{ki}$. Then, 
+    \[
+        d_i b_{ij}' = d_i b_{ij} + d_i b_{ik} b_{kj} = -d_j b_{ji} + d_j b_{jk}b_{ki} = -d_j b_{ji}'. 
+    \]
+    We get a similar result if $i, j \neq k$ and $b_{ik}, b_{kj} < 0$. Otherwise, we have $b_{ij}' = b_{ij}$ and $b_{ji}' = b_{ji}$. This completes the proof of part (1). 
+
+    For part (2), let $B'' = (b_{ij}'')$ be the matrix obtained from $B$ after mutating at $k$ twice. When $i = k$ or $j = k$, we have $b_{ij}'' = -b_{ij}' = b_{ij}$. When $b_{ik}, b_{kj} > 0$, we have 
+    \[
+        b_{ij}' = b_{ij} + b_{ik}b_{kj}, \quad b_{ji}' = b_{ji} - b_{jk} b_{ki}, \quad b_{ik}' = -b_{ik}, \quad b_{jk}' = - b_{kj}. 
+    \]  
+    Then, 
+    \[
+        b_{ij}'' = b_{ij}' - b_{ik}' b_{kj}' = b_{ij} + b_{ik}b_{kj} - b_{ik}b_{kj} = b_{ij}.
+    \]
+    We get a similar result when $b_{ik}, b_{kj} < 0$. In the final case, we get $b_{ij}'' = b_{ij}' = b_{ij}$. This completes the proof of part (2). 
+
+\end{proof}
+
+\begin{Definition}
+    Let $B$ be a skew-symmetrizable matrix. The skew-symmetric matrix $S(B) = (s_{ij})$ defined by 
+    \[
+        s_{ij} = \sgn(b_{ij}) \sqrt{|b_{ij}b_{ji}|} = \sqrt{\frac{d_i}{d_j}} b_{ij}. 
+    \]
+\end{Definition}
+
+From this formulation, we have $S(\mu_k(B)) = \mu_k(S(B))$. 
+
+\section{Y-Patterns}
+
+We want to show that many structural properties of a seed pattern are determined by the mutation class formed by its $n \times n$ exchange matrix and does not depend on the frozen parts. 
+
+Given a labeled seed $(\WT{\mathbf{x}}, \WT{B})$ where $\WT{\mathbf{x}} = (x_1, \ldots, x_n, x_{n+1}, \ldots, x_m)$ and $\WT{B} = (b_{ij})$ is a $m \times n$ extended skew-symmetrizable integer matrix. We define $n$-tuple $\WH{y} = (\WH{y_1}, \ldots, \WH{y_n})$ by 
+\[
+    \WH{y}_j \eqdef \prod_{i = 1}^m x_m^{b_{ij}}. 
+\]
+We call these the \textbf{$Y$-variables} of the labeled seed $(\WT{\mathbf{x}}, \WT{B})$. How do these $Y$-variables behave under mutation? We describe this in the following Theorem. Note that the way they evolve is independent of the extended part of $\WT{B}$. 
+
+\begin{Theorem}
+    Let $(\widetilde{x}, \widetilde{B})$ and $(\widetilde{x}', \widetilde{B}')$ be two labeled seeds related by mutation at $k$. Let $\WH{\mathbf{y}} = (\WH{y}_1, \ldots \WH{y}_n)$ and $\WH{\mathbf{y}}' = (\WH{y}_1', \ldots, \WH{y}_n')$ be the corresponding $Y$-variables.
+    \begin{equation}
+        \WH{y}_j' =
+        \begin{cases}
+            \WH{y}_k^{-1} & \text { if } j = k, \\
+            \WH{y}_j (\WH{y}_k + 1)^{-b_{kj}} & \text{ if } j \neq k \text{ and } b_{kj} \leq 0, \\
+            \WH{y}_j (\WH{y}_k^{-1} + 1)^{-b_{kj}} & \text{ if } j \neq k \text{ and } b_{kj} \geq 0.
+        \end{cases}
+    \end{equation}
+\end{Theorem}
+
+The proof is not difficult! You can just verify the equation in each possible case. Taking this example, we can define the following. 
+
+\begin{Definition}
+    A \textbf{$Y$-seed} of a rank $n$ in a field $\mathscr{F}$ is a pair $(Y, B)$ where 
+    \begin{itemize}
+        \item $Y$ is an $n$-tuple of elements of $\mathscr{F}$; 
+        \item $B$ is a skew-symmetrizable $n \times n$ integer matrix. 
+    \end{itemize}
+    We say that two $Y$-seeds $(Y, B)$ and $(Y', B')$ are related by mutation at $k$ if 
+    \begin{itemize}
+        \item The matrices $B$ and $B'$ are related by mutation at $k$; 
+        \item the $n$-tuple $Y' = (Y_1', \ldots, Y_n')$ is obtained from $Y = (Y_1, \ldots, Y_n)$ by the rules
+        \begin{equation}
+            Y_j' = \begin{cases}
+                Y_k^{-1} & \text { if $j = k$,} \\
+                Y_j(Y_k + 1)^{-b_{kj}} & \text{ if $j \neq k$ and $b_{kj} \leq 0$}, \\
+                Y_j (Y_k^{-1} + 1)^{-b_{kj}} & \text{ if $j \neq k$ and $b_{kj} \geq 0$}. 
+            \end{cases}
+        \end{equation}
+    \end{itemize}
+    A \textbf{$Y$-pattern} is exactly a family $(Y(t), B(t))_{t \in \mathbf{T}_n}$ of $Y$-seeds related by mutations. 
+\end{Definition}
+
+We now relate the matrix mutation with the mutation of $Y$-seeds. We can re-interpret mutation of the bottom part of the extended exchange matrix as a tropicalized version of $Y$-seed mutation. 
+
+\begin{Definition}
+    A \textbf{semifield} is an abelian group $(P, \cdot)$ with an operation of ``addition'' called $\oplus$ which is commutative, associative, and distributive with respect to the abelian group multiplication. 
+\end{Definition}
+
+The main example of a semifield that we will be concerned with is the \textbf{tropical semifield} in $\ell$ indeterminates. We denote this by $\Trop(q_1, \ldots, q_\ell)$. This consists of Laurent monomials in $q_1, \ldots, q_{\ell}$ with abelian group structure and $\oplus$ structure given by 
+\begin{align*}
+    \left( \prod_{i = 1}^\ell q_i^{a_i} \right) \oplus \left ( \prod_{i = 1}^\ell q_i^{b_i} \right ) & \eqdef  \prod_{i = 1}^\ell q_i^{\min\{a_i, b_i\}}, \\
+    \left( \prod_{i = 1}^\ell q_i^{a_i} \right) \cdot \left ( \prod_{i = 1}^\ell q_i^{b_i} \right ) & \eqdef  \prod_{i = 1}^\ell q_i^{a_i + b_i}. 
+\end{align*}
+
+Let $\WT{B}$ be an $m \times n$ extended exchange matrix. Let $x_{n+1}, \ldots, x_m$ be the frozen variables. We can encode the bottom $(m-n) \times n$ matrix with the \textbf{coefficient variables} $\mathbf{y} = (y_1, \ldots, y_n)$ given by 
+\[
+    y_j \eqdef \prod_{i = n+1}^m x_i^{b_{ij}} \in \Trop(x_{n+1}, \ldots, x_m) \quad \text{ for } j \in \{1, \ldots, n\}. 
+\]
+Thus, $\WT{B}$ gives the same information as $B$ and $\mathbf{y}$. 
+
+\begin{Proposition}
+    Let $\WT{B} = (b_{ij})$ and $\WT{B}'$ be two extended exchange matrices related by a mutation at $k$, and let $\mathbf{y}$ and $\mathbf{y}'$ be the corresponding coefficient variables. Then 
+    \begin{equation}
+        y_j' = 
+        \begin{cases}
+            y_k^{-1} & \text {if $j = k$}, \\
+            y_j \cdot (y_k \oplus 1)^{-b_{kj}} & \text{ if $j \neq k$ and $b_{kj} \leq 0$}, \\
+            y_j \cdot (y_k^{-1} \oplus 1)^{-b_{kj}} & \text {if $j \neq k$ and $b_{kj} \geq 0$}. 
+        \end{cases}
+    \end{equation}
+\end{Proposition}
+
+The set $\QQ_{> 0}(x_1, \ldots, x_m)$ can be considered a semifield by the usual multiplication and addition. This is also the universal semifield: given any semifield $K$ and any $t_1, \ldots, t_m \in K$, there is a unique semifield morphism $\QQ_{> 0}(x_1, \ldots, x_m) \to K$ sending $x_i \mapsto t_i$ for $i \in [m]$. This is not hard to show. Using this result, we can get the previous proposition immediately. 
+
+\begin{Definition}
+    Let $\mathscr{F}$ be a field of rational functions (over $\CC$) in some $m$ variables which include the frozen variables $x_{n+1}, \ldots, x_m$. A labeled seed (of geometric type) of rank $n$ is a triple $\Sigma (\mathbf{x}, \mathbf{y}, B)$ consisting of 
+    \begin{itemize}
+        \item a \textbf{cluster} $\mathbf{x}$, an $n$-tuple of elements of $\mathscr{F}$ such that the \textbf{extended cluster} $\mathbf{x} \cup \{x_{n+1}, \ldots, x_m\}$ freely generates $\mathscr{F}$; 
+        \item an \textbf{exchange matrix} $B$, a skew-symmetrizable integer matrix; 
+        \item a \textbf{coefficient tuple} $\mathbf{y}$, an $n$-tuple of Laurent monomials in the tropical semifield $\Trop(x_{n+1}, \ldots, x_m)$. 
+    \end{itemize}
+\end{Definition}
+
+This contains the information as a labeled seed $(\WT{\mathbf{x}}, \WT{B})$! We know how $B$ and $\mathbf{y}$ change under mutation. The matrix $B$ mutates via the usual rules of matrix mutation. The coefficient tuple $\mathbf{y}$ mutates based on the tropical $Y$-seed mutation rule. How does the cluster mutate? This is answered by the next proposition. 
+
+\begin{Proposition}
+    Let $(\mathbf{x}, \mathbf{y}, B)$ and $(\mathbf{x}', \mathbf{y}', B')$ be two seeds related by a mutation at $k$. Then $(\mathbf{x}', \mathbf{y}', B')$ are obtained from $(\mathbf{x}, \mathbf{y}, B)$ as follows:
+    \begin{itemize}
+        \item $B' = \mu_k(B)$;
+        \item $\mathbf{y}'$ is given by the tropical $Y$-seed mutation; 
+        \item $\mathbf{x}' = (\mathbf{x} - \{x_k\}) \cup \{x_k'\}$ where $x_k'$ is defined by the exchange relation 
+        \begin{equation}
+            x_k x_k' = \frac{y_k}{y_k \oplus 1} \prod_{b_{ik} > 0} x_i^{b_{ik}} + \frac{1}{y_k \oplus 1} \prod_{b_{ik} < 0} x_i^{-b_{ik}}. 
+        \end{equation}
+    \end{itemize}
+\end{Proposition}
+
+This is also not hard to see! We can just translate the usual exchange relation into this language. 
+
+\begin{Remark}[A few notes] 
+    We can fix the frozen variables in the very beginning because these never change in the mutation process. When mutating the extended exchange matrix $\WT{B}$, the exchange matrix mutation only occurs with data from the exchange matrix. That is, we do not need the extended part at all to deal with it. 
+\end{Remark}
+
+\section{Folding}
+
+In this section, we introduce a way to construct a quotient exchange matrix, and under certain conditions using equivariant mutation dynamics to construct a quotient version of seeds and patterns. 
+
+\begin{Definition}
+    Let $Q$ be an ice quiver. Let $1, 2, \ldots, m$ be the vertices where $1, \ldots, n$ are mutable and $n+1, \ldots, m$ are frozen. Let $G$ be a group acting on the vertices. We say that $Q$ is \textbf{G}-admissible if 
+    \begin{enumerate}
+        \item  If $i \sim j$, then $i$ is mutable if and only if $j$ is mutable. 
+        \item for any $i$ and $j$, and any $g \in G$, we have $b_{ij} = b_{g(i)g(j)}$. 
+        \item for mutable indices $i \sim i'$, we have $b_{ii'} = 0$.
+        \item for any $i \sim i'$, and any mutable $j$, we have $b_{ij} b_{i'j} \geq 0$. 
+    \end{enumerate}
+\end{Definition}
+
+If $G$ acts on the vertices of a quiver, the idea of the quotient object will be to identify all $G$-orbits with each other. Condition (1) just says that mutable vertices will all group with each other and frozen ones will group with each other. That way, the frozen vertices will remain frozen in any mutation process. The second condition allows us to define 
+\begin{equation}\label{eqn:new-exchange-matrix}
+    b_{IJ}^G \eqdef \sum_{i \in I} b_{ij} \quad \text{ for } j \in J
+\end{equation}
+in a well-defined way. This is our new exchange matrix. Condition 3 means we won't have loops. Condition 4 means that we won't have oriented 2 cycles.  
+
+When $Q$ is $G$-admissible with matrix $\WT{B}$, let $\WT{B}^G = (b_{IJ}^G)$. Then $\WT{B}^G$ is an extended skew-symmetrizable matrix. (Not hard to check). 
+
+Conditions (2) and (4) implies that $b_{IJ}^G > 0$ if and only if $b_{ij} > 0$ for all $i \in I$ and $j \in J$ if and only if for some $i \in I$ and $j \in J$. From Condtion (3), we can mutate all elements in the same orbit without worrying about the order in which we do it. 
+
+\begin{Lemma}
+    Let $Q$ be a $G$-admissible quiver, with $\WT{B} = \WT{B}(Q)$. Let $K$ be a mutable $G$-orbit such that $\mu_K(Q)$ is also $G$-admissible. Then 
+    \[
+        \left( \mu_K (\WT{B}) \right)^G = {\mu_K(\WT{B}^G)}. 
+    \]
+\end{Lemma}
+
+Now that we need the extra condition that $\mu_K(Q)$ is $G$-admissible as this is not always the case. We are done with folding quivers. Now we want to see if we extend this to seeds. We need some extra conditions to do so. 
+
+\begin{Definition}
+    Let $G$ be a group acting on the set of indices $\{1, \ldots, m\}$ so that every $g \in G$ maps the set $\{1, \ldots, n\}$ to itself. Let $m^G$ denote the number of orbits of this action. Let $\cF$ be the field isomorphic to the field of rational functions in $m$ independent variables. Let $\cF^G$ be the field isomorphism to the field of rational functions in $m^G$ independent variables. Let $\cF_{sf}$ and $\cF_{sf}^Q$ be the subtraction-free semifield versions of these fields. That is, if $\cF = \CC(x_1, \ldots, x_m)$ we let $\cF_{sf} = \QQ_{> 0}(x_1, \ldots, x_m)$. Let $\psi: \cF_{sf} \to \cF_{sf}^G$ be a surjective semifield homomorphism. 
+
+    Let $Q$ be a quiver as above. A seed $\Sigma = (\WT{\mathbf{x}}, \WT{B}(Q))$ in $\cF$, with the extended cluster $\WT{\mathbf{x}} = (x_i)$, is called \textbf{$(G, \psi)$-admissible} if 
+    \begin{itemize}
+        \item $Q$ is $G$-admissible, 
+        \item for any $i \sim i'$, we have $\psi(x_i) = \psi(x_{i'})$. 
+    \end{itemize} 
+    We define the \textbf{folded seed} $\Sigma^G = (\WT{\mathbf{x}}^G, \WT{B}^G)$ in $\cF_{sf}^G \subset \cF^G$ whose extended exchange matrix $\WT{B}^G$ is given as before, and the extended cluster $\WT{\mathbf{x}} = (x_I)$ has $m^G$ elements $x_I$ indexed by $G$-orbits and defined by $x_I = \psi(x_i)$ for $i \in I$. Since $\psi$ is surjective, the $x_I$ generate $\cF^G$ and are algebraically independent!
+\end{Definition}
+
+\begin{Lemma}
+    Let $\Sigma = (\WT{\mathbf{x}}, \WT{B})$ be a $(G, \psi)$-admissible seed. Let $K$ be a mutable $G$-orbit. If the quiver $\mu_K(Q)$ is $G$-admissible, then the seed $\mu_K(\Sigma)$ is $(G, \psi)$-admissible, and moreover $(\mu_K(\Sigma))^G = \mu_K(\Sigma^G)$. 
+\end{Lemma}
+
+\begin{Definition}
+    Let $G$ be a group acting on the vertex set of a quiver $Q$. We say that $Q$ is \textbf{globally foldable} with respect to $G$ if $Q$ is $G$-admissible and moreover for any sequence of mutable $G$-orbits $J_1, \ldots, J_k$, the quiver $\mu_{J_K} \circ \ldots \circ \mu_{J_1}(Q)$ is $G$-admissible. 
+\end{Definition}
+
+\begin{Corollary}
+    Let $Q$ be a quiver which is globally foldable with respect to the group $G$. Let $\Sigma = (\WT{\mathbf{x}}, \WT{B})$ be a seed in the field $\cF$ of rational functions freely generated by an extended cluster $\WT{\mathbf{x}} = (x_i)$. Let $\WT{\mathbf{x}}^G = (x_I)$ be a collection of formal variables labeled by the $G$-orbits $I$, and let $\cF^G$ denote the field of rational functions in those variables. Define the surjective homomorphism 
+    \[
+        \psi : \cF_{sf} \to \cF_{sf}^G
+    \]
+    mapping $x_i \mapsto x_I$ so that $\Sigma$ is a $(G, \psi)$ admissible seed. Then for any mutable $G$ orbits $J_1, \ldots, J_k$ the seed $\mu_{J_k} \circ \ldots \circ \mu_{J_1}(\Sigma)$ is $(G, \psi)$-admissible, and moreover the folded seeds $((\mu_{J_k} \circ \ldots \circ \mu_{J_1} )(\Sigma))^G$ forms a seed pattern in $\cF^G$ with initial exchange matrix $(\WT{B}(Q))^G$. 
+\end{Corollary}
+\appendix
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    
+% To add references to your document, replace the two \bib commands below. 
+%
+%         1. You can use a list of \bib commands for the items you reference as is
+%         done in our toy example here.
+%
+%         2. A second option is to use the command 
+%             \bibselect{yourltbfile}
+%         to point to a file of \bib commands that should be named 
+%         yourltbfile.ltb and be placed in the same folder as your LaTeX
+%         source files. 
+%
+%         3. A third option is to use the command 
+%             \bibliography{yourbibfile}
+%         to point to a file of BibTeX \bib commands that should be named 
+%         yourltbfile.bbl and be placed in the same folder as your LaTeX
+%         source files. 
+%   
+% If you use option 3. above, you should comment out or delete the lines
+%            \begin{bibdiv}
+%                \begin{biblist}
+%        before the \bib command below as well as the line
+%                  \end{biblist}
+%              \end{bibdiv}
+%        after it. 
+%
+% If you use options 2. or 3. and wish to make your source file self-contained you may
+%         for final submission, simply copy the \bib entries to your \LaTeX\ file and
+%         wrap them, if necessary, as indicated above.
+%  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibspread
+\bibliographystyle{plain}
+\bibliography{ref}
+
+
+\vfill\eject
+\end{document}
